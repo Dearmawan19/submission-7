@@ -77,7 +77,7 @@ Variabel-variabel pada dataset adalah sebagai berikut:
 Visualisasi Data dan Exploratory Data Analysis (EDA):
 
 * Distribusi Rating Buku:
-    [Bar chart menunjukkan frekuensi setiap nilai rating (0-10). Rating 0 memiliki frekuensi tertinggi, jauh melebihi rating lainnya. Rating 8, 7, dan 10 adalah rating eksplisit yang paling sering muncul berikutnya.]
+* [Bar chart menunjukkan frekuensi setiap nilai rating (0-10). Rating 0 memiliki frekuensi tertinggi, jauh melebihi rating lainnya. Rating 8, 7, dan 10 adalah rating eksplisit yang paling sering muncul berikutnya.]
   
 ![image](https://github.com/user-attachments/assets/7d20b9de-cf44-4c12-a2b7-7546a3421fbb)
 
@@ -85,7 +85,7 @@ Visualisasi Data dan Exploratory Data Analysis (EDA):
 Insight: Sebagian besar interaksi dalam dataset adalah implisit (rating 0). Untuk analisis yang melibatkan preferensi eksplisit, fokus pada rating 1-10 akan lebih relevan. Rating tinggi (7-10) menunjukkan sentimen positif yang lebih kuat dari pengguna.
 
 * Distribusi Usia Pengguna:
-    [Histogram menunjukkan distribusi frekuensi usia pengguna setelah penanganan outlier awal. Puncak distribusi berada di sekitar usia 20-40 tahun, dengan penurunan frekuensi untuk usia yang lebih tua.]
+* [Histogram menunjukkan distribusi frekuensi usia pengguna setelah penanganan outlier awal. Puncak distribusi berada di sekitar usia 20-40 tahun, dengan penurunan frekuensi untuk usia yang lebih tua.]
 
 ![image](https://github.com/user-attachments/assets/d340d6ba-3317-4722-adaf-3b7a565b8695)
 
@@ -93,7 +93,10 @@ Insight: Sebagian besar interaksi dalam dataset adalah implisit (rating 0). Untu
 Insight: Mayoritas pengguna aktif dalam dataset ini berada dalam rentang usia dewasa muda hingga paruh baya. Informasi ini bisa berguna untuk segmentasi atau personalisasi lebih lanjut, meskipun dalam proyek ini tidak digunakan secara langsung dalam pemodelan utama.
 
 * Top 10 Buku dengan Jumlah Rating Terbanyak:
-    [Bar chart horizontal menampilkan 10 judul buku yang paling banyak menerima rating, dengan "Wild Animus" di posisi teratas dengan jumlah rating signifikan lebih banyak dari buku lainnya.]
+* [Bar chart horizontal menampilkan 10 judul buku yang paling banyak menerima rating, dengan "Wild Animus" di posisi teratas dengan jumlah rating signifikan lebih banyak dari buku lainnya.]
+
+![image](https://github.com/user-attachments/assets/631619ae-85ec-46e5-8112-7cf40f407c61)
+
     Insight: Buku "Wild Animus" sangat dominan dalam hal jumlah rating yang diterima, menunjukkan popularitas atau mungkin bias dalam dataset. Buku-buku populer lainnya seperti "The Lovely Bones: A Novel" dan "The Da Vinci Code" juga muncul. Ini bisa menjadi pertimbangan dalam evaluasi, karena buku populer cenderung lebih mudah direkomendasikan.
 
 ## Data Preparation
@@ -160,31 +163,23 @@ Dua pendekatan sistem rekomendasi diimplementasikan: Content-Based Filtering dan
 
     * Fungsi Rekomendasi: Fungsi `get_content_based_recommendations_sample(isbn, N=10)` dibuat untuk menghasilkan top-N rekomendasi. Fungsi ini mengambil ISBN buku sebagai input, mencari buku tersebut dalam sampel, mendapatkan skor kemiripannya dengan semua buku lain, mengurutkannya, dan mengembalikan N buku teratas yang paling mirip beserta skor kesamaannya.
     * Hasil (Top-N Recommendation): Contoh output untuk buku 'The F Word' (ISBN 0679764275) dari sampel, N=5:
+      
+|       | ISBN       | Book-Title                                               | Book-Author           | similarity_score |
+| :---- | :--------- | :------------------------------------------------------- | :-------------------- | :--------------- |
+| 19535 | 0375407413 | Random House Webster's College Dictionary                | Random House          | 0.380672         |
+| 22905 | 0679780114 | Random House Webster's American Sign Language Dictionary | Elaine, Ph.D. Costello | 0.290939         |
+| 8505  | 0679408797 | Conglomeros                                              | Jesse Browner         | 0.172857         |
+| 19407 | 0394487028 | Hers                                                     | A Alvarez             | 0.128790         |
+| 15419 | 0394840909 | I Can Count to 100 ... Can You? (Random House Pictureback) | Katherine Howard      | 0.115693         |
 
-        ```
-                 ISBN                                                  Book-Title  \
-        19535  0375407413                   Random House Webster's College Dictionary   
-        22905  0679780114    Random House Webster's American Sign Language Dictionary   
-        8505   0679408797                                                 Conglomeros   
-        19407  0394487028                                                        Hers   
-        15419  0394840909  I Can Count to 100 ... Can You? (Random House Pictureback)   
-
-                          Book-Author  similarity_score  
-        19535            Random House          0.380672  
-        22905  Elaine, Ph.D. Costello          0.290939  
-        8505            Jesse Browner          0.172857  
-        19407               A Alvarez          0.128790  
-        15419        Katherine Howard          0.115693
-        ```
-
-    * Kelebihan Pendekatan Content-Based:
-        * Dapat merekomendasikan item baru yang belum memiliki interaksi pengguna (mengatasi sebagian masalah cold start untuk item).
-        * Rekomendasi bersifat transparan dan dapat dijelaskan berdasarkan fitur item (misalnya, "buku ini direkomendasikan karena memiliki penulis yang sama").
-        * Tidak bergantung pada data pengguna lain.
-    * Kekurangan Pendekatan Content-Based:
-        * Kualitas rekomendasi sangat bergantung pada kualitas fitur yang diekstraksi. Jika fitur tidak representatif, rekomendasi akan buruk.
-        * Cenderung menghasilkan rekomendasi yang serendipity-nya rendah (kurang mengejutkan) karena hanya merekomendasikan item yang sangat mirip dengan yang sudah disukai pengguna.
-        * Bisa terjadi over-specialization, di mana pengguna terjebak dalam gelembung filter dan tidak terekspos pada item yang beragam.
+* Kelebihan Pendekatan Content-Based:
+     * Dapat merekomendasikan item baru yang belum memiliki interaksi pengguna (mengatasi sebagian masalah cold start untuk item).
+     * Rekomendasi bersifat transparan dan dapat dijelaskan berdasarkan fitur item (misalnya, "buku ini direkomendasikan karena memiliki penulis yang sama").
+     * Tidak bergantung pada data pengguna lain.
+* Kekurangan Pendekatan Content-Based:
+    * Kualitas rekomendasi sangat bergantung pada kualitas fitur yang diekstraksi. Jika fitur tidak representatif, rekomendasi akan buruk.
+    * Cenderung menghasilkan rekomendasi yang serendipity-nya rendah (kurang mengejutkan) karena hanya merekomendasikan item yang sangat mirip dengan yang sudah disukai pengguna.
+    * Bisa terjadi over-specialization, di mana pengguna terjebak dalam gelembung filter dan tidak terekspos pada item yang beragam.
 
 2.  **Collaborative Filtering (SVD)**
     Pendekatan ini merekomendasikan buku berdasarkan pola rating dari komunitas pengguna.
@@ -206,30 +201,22 @@ Dua pendekatan sistem rekomendasi diimplementasikan: Content-Based Filtering dan
         * Mengembalikan N buku teratas beserta detailnya (ISBN, Judul, Penulis) dan prediksi ratingnya.
     * Hasil (Top-N Recommendation): Contoh output untuk User-ID 276747, N=5:
 
-        ```
-                 ISBN                                             Book-Title  \
-        0  0743454529           My Sister's Keeper : A Novel (Picoult, Jodi)   
-        1  0812550706          Ender's Game (Ender Wiggins Saga (Paperback))   
-        2  0439136369      Harry Potter and the Prisoner of Azkaban (Book 3)   
-        3  0836213319                           Dilbert: A Book of Postcards   
-        4  0439425220  Harry Potter and the Chamber of Secrets Postcard Book   
+|     | ISBN       | Book-Title                                                | Book-Author      | estimated_rating |
+| :-- | :--------- | :-------------------------------------------------------- | :--------------- | :--------------- |
+| 0   | 0743454529 | My Sister's Keeper : A Novel (Picoult, Jodi)              | Jodi Picoult     | 9.540725         |
+| 1   | 0812550706 | Ender's Game (Ender Wiggins Saga (Paperback))             | Orson Scott Card | 9.432904         |
+| 2   | 0439136369 | Harry Potter and the Prisoner of Azkaban (Book 3)         | J. K. Rowling    | 9.430569         |
+| 3   | 0836213319 | Dilbert: A Book of Postcards                              | Scott Adams      | 9.373584         |
+| 4   | 0439425220 | Harry Potter and the Chamber of Secrets Postcard Book     | J. K. Rowling    | 9.369498         |
 
-                Book-Author  estimated_rating  
-        0      Jodi Picoult          9.540725  
-        1  Orson Scott Card          9.432904  
-        2     J. K. Rowling          9.430569  
-        3       Scott Adams          9.373584  
-        4     J. K. Rowling          9.369498
-        ```
-
-    * Kelebihan Pendekatan Collaborative Filtering (SVD):
-        * Mampu menemukan pola preferensi yang kompleks dan tersembunyi dari data interaksi pengguna-item.
-        * Dapat menghasilkan rekomendasi yang serendipitous (mengejutkan namun relevan) karena tidak bergantung pada fitur item secara eksplisit.
-        * Tidak memerlukan pengetahuan domain tentang item yang direkomendasikan.
-    * Kekurangan Pendekatan Collaborative Filtering (SVD):
-        * Mengalami masalah cold start: sulit memberikan rekomendasi untuk pengguna baru (yang belum memiliki riwayat rating) atau item baru (yang belum pernah dirating).
-        * Kinerja sangat dipengaruhi oleh sparsity data. Jika data rating sangat jarang, model akan kesulitan belajar pola yang signifikan.
-        * Kurang transparan; sulit menjelaskan mengapa suatu item direkomendasikan selain karena "pengguna serupa menyukainya".
+* Kelebihan Pendekatan Collaborative Filtering (SVD):
+    * Mampu menemukan pola preferensi yang kompleks dan tersembunyi dari data interaksi pengguna-item.
+    * Dapat menghasilkan rekomendasi yang serendipitous (mengejutkan namun relevan) karena tidak bergantung pada fitur item secara eksplisit.
+    * Tidak memerlukan pengetahuan domain tentang item yang direkomendasikan.
+* Kekurangan Pendekatan Collaborative Filtering (SVD):
+    * Mengalami masalah cold start: sulit memberikan rekomendasi untuk pengguna baru (yang belum memiliki riwayat rating) atau item baru (yang belum pernah dirating).
+    * Kinerja sangat dipengaruhi oleh sparsity data. Jika data rating sangat jarang, model akan kesulitan belajar pola yang signifikan.
+    * Kurang transparan; sulit menjelaskan mengapa suatu item direkomendasikan selain karena "pengguna serupa menyukainya".
 
 ## Evaluation
 
@@ -241,34 +228,23 @@ Dua pendekatan sistem rekomendasi diimplementasikan: Content-Based Filtering dan
         * Secara manual memeriksa apakah buku-buku yang direkomendasikan tersebut terlihat mirip atau relevan dengan buku input berdasarkan judul, penulis, atau tema yang mungkin tersirat.
     * Contoh Hasil Evaluasi (untuk buku 'Enterprise One to One: Tools for Competing in the Interactive Age' dengan ISBN 038548755X dari sampel):
 
-        ```
-                 ISBN                                                                                                  Book-Title  \
-        8969   0385494092         One to One B2B: Customer Development Strategies for the Business-To-Business World (One to One)   
-        11157  038549369X  The One to One Fieldbook: The Complete Toolkit for Implementing a 1To1 Marketing Program (One to One)   
-        26088  0679790756                                      Windows 3.1 Power Tools/Book and Disk (Bantam Power Tools Series)   
-        16170  0385420579                                                                                    The Republic of Tea   
-        8037   0440425050                                                                   Five Little Peppers and How They Grew   
-        10711  0609608002                             Start with NO...The Negotiating Tools that the Pros Don't Want You to Know   
-        5192   0448058081                                                                   Five Little Peppers and How They Grew   
-        4152   059042520x                                                  Five Little Peppers and How They Grew (Apple Classics)   
-        22816  0385421540                                                Managing by Storying Around: A New Method of Leadership   
-        25547  0201144689                             Fundamentals of Interactive Computer Graphics (Systems Programming Series)   
+      
+|       | ISBN       | Book-Title                                                                                              | Book-Author         | similarity_score |
+| :---- | :--------- | :------------------------------------------------------------------------------------------------------ | :------------------ | :--------------- |
+| 8969  | 0385494092 | One to One B2B: Customer Development Strategies for the Business-To-Business World (One to One)         | Don Peppers         | 0.262420         |
+| 11157 | 038549369X | The One to One Fieldbook: The Complete Toolkit for Implementing a 1To1 Marketing Program (One to One) | Don Peppers         | 0.258237         |
+| 26088 | 0679790756 | Windows 3.1 Power Tools/Book and Disk (Bantam Power Tools Series)                                       | Geoffrey T. Leblond | 0.086537         |
+| 16170 | 0385420579 | The Republic of Tea                                                                                     | Mel Ziegler         | 0.080384         |
+| 8037  | 0440425050 | Five Little Peppers and How They Grew                                                                   | Margaret Sidney     | 0.077253         |
+| 10711 | 0609608002 | Start with NO...The Negotiating Tools that the Pros Don't Want You to Know                                | Jim Camp            | 0.072519         |
+| 5192  | 0448058081 | Five Little Peppers and How They Grew                                                                   | Margaret Sidney     | 0.068112         |
+| 4152  | 059042520x | Five Little Peppers and How They Grew (Apple Classics)                                                  | Margaret Sidney     | 0.067535         |
+| 22816 | 0385421540 | Managing by Storying Around: A New Method of Leadership                                                 | David Armstrong     | 0.064898         |
+| 25547 | 0201144689 | Fundamentals of Interactive Computer Graphics (Systems Programming Series)                                | James D. Foley      | 0.063721         |
 
-               Book-Author  similarity_score  
-        8969           Don Peppers          0.262420  
-        11157          Don Peppers          0.258237  
-        26088  Geoffrey T. Leblond          0.086537  
-        16170          Mel Ziegler          0.080384  
-        8037       Margaret Sidney          0.077253  
-        10711             Jim Camp          0.072519  
-        5192       Margaret Sidney          0.068112  
-        4152       Margaret Sidney          0.067535  
-        22816      David Armstrong          0.064898  
-        25547       James D. Foley          0.063721
-        ```
 
-    * Interpretasi Hasil:
-        Berdasarkan contoh output, buku-buku yang direkomendasikan seperti "One to One B2B" dan "The One to One Fieldbook" (keduanya oleh Don Peppers, sama seperti buku input jika penulisnya adalah Don Peppers atau Martha Rogers) tampak relevan secara tematis dengan buku input yang berfokus pada "One to One" marketing. Ini menunjukkan bahwa model mampu menangkap kemiripan berdasarkan penulis dan tema judul. Namun, skor kesamaan yang dihasilkan relatif rendah (mayoritas di bawah 0.1, dengan yang tertinggi sekitar 0.26). Hal ini mengindikasikan bahwa meskipun ada relevansi, kemiripan konten berdasarkan fitur yang digunakan (judul, penulis, penerbit) mungkin tidak terlalu kuat untuk semua rekomendasi, atau representasi TF-IDF dengan n-gram (1,2) belum sepenuhnya menangkap nuansa kemiripan yang lebih dalam. Evaluasi lebih lanjut bisa melibatkan pengumpulan feedback pengguna atau penggunaan metrik seperti precision@N dan recall@N jika ada data ground truth yang sesuai. Metrik ini sesuai dengan konteks data (teks), problem statement (menemukan buku mirip), dan solusi (content-based).
+* Interpretasi Hasil:
+     Berdasarkan contoh output, buku-buku yang direkomendasikan seperti "One to One B2B" dan "The One to One Fieldbook" (keduanya oleh Don Peppers, sama seperti buku input jika penulisnya adalah Don Peppers atau Martha Rogers) tampak relevan secara tematis dengan buku input yang berfokus pada "One to One" marketing. Ini menunjukkan bahwa model mampu menangkap kemiripan berdasarkan penulis dan tema judul. Namun, skor kesamaan yang dihasilkan relatif rendah (mayoritas di bawah 0.1, dengan yang tertinggi sekitar 0.26). Hal ini mengindikasikan bahwa meskipun ada relevansi, kemiripan konten berdasarkan fitur yang digunakan (judul, penulis, penerbit) mungkin tidak terlalu kuat untuk semua rekomendasi, atau representasi TF-IDF dengan n-gram (1,2) belum sepenuhnya menangkap nuansa kemiripan yang lebih dalam. Evaluasi lebih lanjut bisa melibatkan pengumpulan feedback pengguna atau penggunaan metrik seperti precision@N dan recall@N jika ada data ground truth yang sesuai. Metrik ini sesuai dengan konteks data (teks), problem statement (menemukan buku mirip), dan solusi (content-based).
 
 2.  **Collaborative Filtering (SVD)**
     Evaluasi untuk model collaborative filtering berbasis SVD menggunakan metrik kuantitatif standar yang mengukur akurasi prediksi rating.
@@ -289,5 +265,4 @@ Dua pendekatan sistem rekomendasi diimplementasikan: Content-Based Filtering dan
         Kedua metrik ini sesuai dengan konteks data (rating numerik), problem statement (memprediksi preferensi pengguna), dan solusi (collaborative filtering SVD). Mengingat skala rating adalah 1-10, nilai kesalahan rata-rata sekitar 1.2 hingga 1.6 poin rating menunjukkan bahwa model memiliki kemampuan prediksi yang cukup baik, namun masih terdapat ruang untuk peningkatan. Performa ini bisa ditingkatkan lebih lanjut melalui hyperparameter tuning yang lebih ekstensif pada model SVD, mencoba algoritma collaborative filtering lainnya, atau menggabungkannya dengan pendekatan lain (misalnya, hibrida). Selain akurasi prediksi rating, untuk sistem yang bertujuan menghasilkan daftar top-N, metrik evaluasi seperti precision@N, recall@N, F1-score@N, atau nDCG juga sangat relevan untuk mengukur kualitas urutan rekomendasi.
 
  **Penjabaran Hasil Evaluasi**
- 
-  Berdasarkan implementasi proyek sistem rekomendasi buku yang dikembangkan menggunakan pendekatan content-based filtering dan collaborative filtering (SVD), seluruh problem statement yang telah dirumuskan berhasil dijawab secara sistematis. Permasalahan terkait kesulitan pengguna dalam menemukan buku yang relevan telah diatasi melalui pemanfaatan content-based filtering yang merekomendasikan buku berdasarkan kesamaan fitur seperti judul dan penulis, memungkinkan pengguna tetap mendapatkan rekomendasi meskipun belum pernah memberikan rating sebelumnya. Di sisi lain, collaborative filtering dengan metode Singular Value Decomposition (SVD) mampu mempelajari pola interaksi antar pengguna dan buku, sehingga dapat memberikan rekomendasi yang lebih personal dan kontekstual. Dari sisi pencapaian tujuan (goals), sistem ini terbukti berhasil memberikan rekomendasi yang akurat, yang ditunjukkan oleh nilai Root Mean Square Error (RMSE) sebesar 1.57 pada model SVD, yang merupakan indikator performa prediktif yang cukup baik dalam konteks data rating. Selain itu, solusi-solusi yang dirancang terbukti berdampak signifikan terhadap kualitas sistem rekomendasi. Content-based filtering memberikan fleksibilitas pada sistem untuk tetap memberikan rekomendasi meski data pengguna terbatas, sementara collaborative filtering menambah dimensi personalisasi berdasarkan preferensi kolektif. Dampak keseluruhan dari kedua pendekatan ini menciptakan sistem rekomendasi yang tidak hanya fungsional, namun juga scalable dan relevan untuk diterapkan dalam platform digital literasi atau toko buku daring. Ke depan, hasil ini memberikan landasan yang kuat untuk pengembangan sistem hybrid yang menggabungkan keunggulan kedua metode demi meningkatkan kepuasan pengguna secara menyeluruh.
+Berdasarkan implementasi proyek sistem rekomendasi buku yang dikembangkan menggunakan pendekatan content-based filtering dan collaborative filtering (SVD), seluruh problem statement yang telah dirumuskan berhasil dijawab secara sistematis. Permasalahan terkait kesulitan pengguna dalam menemukan buku yang relevan telah diatasi melalui pemanfaatan content-based filtering yang merekomendasikan buku berdasarkan kesamaan fitur seperti judul dan penulis, memungkinkan pengguna tetap mendapatkan rekomendasi meskipun belum pernah memberikan rating sebelumnya. Di sisi lain, collaborative filtering dengan metode Singular Value Decomposition (SVD) mampu mempelajari pola interaksi antar pengguna dan buku, sehingga dapat memberikan rekomendasi yang lebih personal dan kontekstual. Dari sisi pencapaian tujuan (goals), sistem ini terbukti berhasil memberikan rekomendasi yang akurat, yang ditunjukkan oleh nilai Root Mean Square Error (RMSE) sebesar 1.57 pada model SVD, yang merupakan indikator performa prediktif yang cukup baik dalam konteks data rating. Selain itu, solusi-solusi yang dirancang terbukti berdampak signifikan terhadap kualitas sistem rekomendasi. Content-based filtering memberikan fleksibilitas pada sistem untuk tetap memberikan rekomendasi meski data pengguna terbatas, sementara collaborative filtering menambah dimensi personalisasi berdasarkan preferensi kolektif. Dampak keseluruhan dari kedua pendekatan ini menciptakan sistem rekomendasi yang tidak hanya fungsional, namun juga scalable dan relevan untuk diterapkan dalam platform digital literasi atau toko buku daring. Ke depan, hasil ini memberikan landasan yang kuat untuk pengembangan sistem hybrid yang menggabungkan keunggulan kedua metode demi meningkatkan kepuasan pengguna secara menyeluruh.
