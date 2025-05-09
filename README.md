@@ -78,7 +78,11 @@ Visualisasi Data dan Exploratory Data Analysis (EDA):
 
 * Distribusi Rating Buku:
     [Bar chart menunjukkan frekuensi setiap nilai rating (0-10). Rating 0 memiliki frekuensi tertinggi, jauh melebihi rating lainnya. Rating 8, 7, dan 10 adalah rating eksplisit yang paling sering muncul berikutnya.]
-    Insight: Sebagian besar interaksi dalam dataset adalah implisit (rating 0). Untuk analisis yang melibatkan preferensi eksplisit, fokus pada rating 1-10 akan lebih relevan. Rating tinggi (7-10) menunjukkan sentimen positif yang lebih kuat dari pengguna.
+  
+![image](https://github.com/user-attachments/assets/7d20b9de-cf44-4c12-a2b7-7546a3421fbb)
+
+
+Insight: Sebagian besar interaksi dalam dataset adalah implisit (rating 0). Untuk analisis yang melibatkan preferensi eksplisit, fokus pada rating 1-10 akan lebih relevan. Rating tinggi (7-10) menunjukkan sentimen positif yang lebih kuat dari pengguna.
 * Distribusi Usia Pengguna:
     [Histogram menunjukkan distribusi frekuensi usia pengguna setelah penanganan outlier awal. Puncak distribusi berada di sekitar usia 20-40 tahun, dengan penurunan frekuensi untuk usia yang lebih tua.]
     Insight: Mayoritas pengguna aktif dalam dataset ini berada dalam rentang usia dewasa muda hingga paruh baya. Informasi ini bisa berguna untuk segmentasi atau personalisasi lebih lanjut, meskipun dalam proyek ini tidak digunakan secara langsung dalam pemodelan utama.
