@@ -83,9 +83,15 @@ Visualisasi Data dan Exploratory Data Analysis (EDA):
 
 
 Insight: Sebagian besar interaksi dalam dataset adalah implisit (rating 0). Untuk analisis yang melibatkan preferensi eksplisit, fokus pada rating 1-10 akan lebih relevan. Rating tinggi (7-10) menunjukkan sentimen positif yang lebih kuat dari pengguna.
+
 * Distribusi Usia Pengguna:
     [Histogram menunjukkan distribusi frekuensi usia pengguna setelah penanganan outlier awal. Puncak distribusi berada di sekitar usia 20-40 tahun, dengan penurunan frekuensi untuk usia yang lebih tua.]
-    Insight: Mayoritas pengguna aktif dalam dataset ini berada dalam rentang usia dewasa muda hingga paruh baya. Informasi ini bisa berguna untuk segmentasi atau personalisasi lebih lanjut, meskipun dalam proyek ini tidak digunakan secara langsung dalam pemodelan utama.
+
+![image](https://github.com/user-attachments/assets/d340d6ba-3317-4722-adaf-3b7a565b8695)
+
+
+Insight: Mayoritas pengguna aktif dalam dataset ini berada dalam rentang usia dewasa muda hingga paruh baya. Informasi ini bisa berguna untuk segmentasi atau personalisasi lebih lanjut, meskipun dalam proyek ini tidak digunakan secara langsung dalam pemodelan utama.
+
 * Top 10 Buku dengan Jumlah Rating Terbanyak:
     [Bar chart horizontal menampilkan 10 judul buku yang paling banyak menerima rating, dengan "Wild Animus" di posisi teratas dengan jumlah rating signifikan lebih banyak dari buku lainnya.]
     Insight: Buku "Wild Animus" sangat dominan dalam hal jumlah rating yang diterima, menunjukkan popularitas atau mungkin bias dalam dataset. Buku-buku populer lainnya seperti "The Lovely Bones: A Novel" dan "The Da Vinci Code" juga muncul. Ini bisa menjadi pertimbangan dalam evaluasi, karena buku populer cenderung lebih mudah direkomendasikan.
