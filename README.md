@@ -47,7 +47,10 @@ Proyek ini menggunakan dataset publik yang terdiri dari tiga file CSV terpisah: 
 * Users.csv berisi informasi mengenai pengguna, dengan 278.858 entri dan 3 kolom.
 * Ratings.csv berisi informasi rating yang diberikan pengguna terhadap buku, dengan 1.149.780 entri dan 3 kolom.
 
-Kondisi data secara umum cukup baik, meskipun terdapat beberapa nilai hilang dan data yang memerlukan pembersihan, terutama pada kolom Year-Of-Publication di Books.csv dan Age di Users.csv. Dataset ini dapat diunduh dari berbagai repositori data publik, salah satunya adalah Kaggle (misalnya, dataset "Book-Crossings" yang populer untuk proyek sistem rekomendasi buku).
+Kondisi data secara umum tergolong baik. Meskipun terdapat beberapa nilai hilang dan data yang memerlukan pembersihan, khususnya pada kolom Year-Of-Publication &  Publisher di Books.csv dan kolom Age di Users.csv, keseluruhan struktur dataset cukup konsisten. Sementara itu, Ratings.csv tidak mengandung nilai yang hilang, sehingga tidak memerlukan proses pembersihan pada bagian tersebut.
+
+Selain itu, ketiga dataset — Books.csv, Users.csv, dan Ratings.csv — telah diperiksa dan tidak mengandung baris duplikat, sehingga tidak diperlukan proses penghapusan duplikasi. Dataset ini tersedia di berbagai repositori publik, salah satunya adalah di Kaggle dengan nama dataset populer “Book-Crossings” yang sering digunakan dalam proyek sistem rekomendasi buku.
+
 
 Tautan Sumber Data: https://www.kaggle.com/datasets/arashnic/book-recommendation-dataset/data
 
@@ -74,7 +77,7 @@ Variabel-variabel pada dataset adalah sebagai berikut:
     * Book-Rating: Rating yang diberikan oleh pengguna untuk buku tersebut. Skala rating adalah 0 hingga 10. Rating 0 umumnya menandakan rating implisit (misalnya, buku ada di rak pengguna) atau tidak ada rating eksplisit yang diberikan. (tipe: int64).
     * Observasi: Dataset rating sangat besar dan tidak memiliki nilai hilang pada kolom-kolomnya. Mayoritas (lebih dari 700.000 dari 1.1 juta) rating adalah 0. Ini penting untuk dipertimbangkan karena model collaborative filtering yang akan digunakan (SVD) biasanya bekerja lebih baik dengan rating eksplisit (1-10).
 
-Visualisasi Data dan Exploratory Data Analysis (EDA):
+### Visualisasi Data dan Exploratory Data Analysis (EDA):
 
 * Distribusi Rating Buku:
 * [Bar chart menunjukkan frekuensi setiap nilai rating (0-10). Rating 0 memiliki frekuensi tertinggi, jauh melebihi rating lainnya. Rating 8, 7, dan 10 adalah rating eksplisit yang paling sering muncul berikutnya.]
@@ -97,36 +100,40 @@ Insight: Mayoritas pengguna aktif dalam dataset ini berada dalam rentang usia de
 
 ![image](https://github.com/user-attachments/assets/631619ae-85ec-46e5-8112-7cf40f407c61)
 
-    Insight: Buku "Wild Animus" sangat dominan dalam hal jumlah rating yang diterima, menunjukkan popularitas atau mungkin bias dalam dataset. Buku-buku populer lainnya seperti "The Lovely Bones: A Novel" dan "The Da Vinci Code" juga muncul. Ini bisa menjadi pertimbangan dalam evaluasi, karena buku populer cenderung lebih mudah direkomendasikan.
+Insight: Buku "Wild Animus" sangat dominan dalam hal jumlah rating yang diterima, menunjukkan popularitas atau mungkin bias dalam dataset. Buku-buku populer lainnya seperti "The Lovely Bones: A Novel" dan "The Da Vinci Code" juga muncul. Ini bisa menjadi pertimbangan dalam evaluasi, karena buku populer cenderung lebih mudah direkomendasikan.
 
 ## Data Preparation
 
 Proses persiapan data dilakukan untuk membersihkan, mentransformasi, dan menyusun data agar optimal untuk digunakan dalam tahap pemodelan. Teknik yang digunakan pada notebook dan laporan ini sudah berurutan.
 
-1.  **Persiapan books_df**:
-    * Koreksi Year-Of-Publication:
-        Proses: Kolom Year-Of-Publication awalnya bertipe object dan mengandung beberapa nilai non-numerik. Dilakukan konversi ke tipe numerik menggunakan `pd.to_numeric` dengan parameter `errors='coerce'`, yang akan mengubah nilai yang tidak bisa dikonversi menjadi NaN. Nilai NaN yang dihasilkan (termasuk yang mungkin sudah ada sebelumnya atau akibat konversi) kemudian diisi dengan nilai median dari tahun publikasi yang valid. Akhirnya, tipe data kolom ini diubah menjadi int.
-        Alasan: Memastikan konsistensi tipe data tahun menjadi numerik sangat penting untuk analisis temporal atau penggunaan sebagai fitur. Mengisi nilai yang salah format atau hilang dengan median adalah strategi imputasi yang umum untuk menjaga integritas data tanpa memperkenalkan bias ekstrem.
-    * Mengisi Nilai Hilang pada Book-Author dan Publisher:
+1.  **Persiapan books_df**:  
+    * **Koreksi Year-Of-Publication:**
+        Proses: Kolom Year-Of-Publication awalnya bertipe object dan mengandung beberapa nilai non-numerik. Dilakukan konversi ke tipe numerik menggunakan `pd.to_numeric` dengan parameter `errors='coerce'`, yang akan mengubah nilai yang tidak bisa dikonversi menjadi NaN.
+    
+      Nilai NaN yang dihasilkan (termasuk yang mungkin sudah ada sebelumnya atau akibat konversi) kemudian diisi dengan nilai median dari tahun publikasi yang valid. Akhirnya, tipe data kolom ini diubah menjadi int.
+       * *Alasan:* Memastikan konsistensi tipe data tahun menjadi numerik sangat penting untuk analisis temporal atau penggunaan sebagai fitur. Mengisi nilai yang salah format atau hilang dengan median adalah strategi imputasi yang umum untuk menjaga integritas data tanpa memperkenalkan bias ekstrem.
+
+     * **Mengisi Nilai Hilang pada Book-Author dan Publisher:**
         Proses: Nilai NaN pada kolom Book-Author diisi dengan string 'Unknown Author', dan pada kolom Publisher diisi dengan string 'Unknown Publisher'.
-        Alasan: Untuk model content-based filtering, informasi penulis dan penerbit akan digunakan sebagai bagian dari konten. Mengisi nilai yang hilang dengan placeholder generik memastikan semua buku memiliki informasi ini, sehingga tidak ada data yang terbuang saat pembuatan fitur konten dan menghindari error pada algoritma yang tidak bisa menangani nilai hilang.
-    * Menghapus Kolom URL Gambar:
+        * *Alasan:* Untuk model content-based filtering, informasi penulis dan penerbit akan digunakan sebagai bagian dari konten. Mengisi nilai yang hilang dengan placeholder generik memastikan semua buku memiliki informasi ini, sehingga tidak ada data yang terbuang saat pembuatan fitur konten dan menghindari error pada algoritma yang tidak bisa menangani nilai hilang.
+    
+    * **Menghapus Kolom URL Gambar:**
         Proses: Kolom Image-URL-S, Image-URL-M, dan Image-URL-L dihapus dari dataframe.
-        Alasan: Kolom-kolom ini berisi URL gambar sampul buku dan tidak akan digunakan sebagai fitur dalam model rekomendasi berbasis teks yang dikembangkan dalam proyek ini. Menghapusnya akan mengurangi dimensi data dan menyederhanakan dataset.
-    * Pembuatan Kolom `content` untuk Content-Based Filtering:
+         *  *Alasan:* Kolom-kolom ini berisi URL gambar sampul buku dan tidak akan digunakan sebagai fitur dalam model rekomendasi berbasis teks yang dikembangkan dalam proyek ini. Menghapusnya akan mengurangi dimensi data dan menyederhanakan dataset.
+    * **Pembuatan Kolom `content` untuk Content-Based Filtering:**
         Proses: Sebuah kolom baru bernama `content` dibuat dengan menggabungkan informasi dari kolom Book-Title, Book-Author, dan Publisher menjadi satu string teks tunggal untuk setiap buku. Ini dilakukan pada sampel data `books_cb_sample` yang digunakan untuk content-based filtering. Nilai NaN pada kolom-kolom tersebut (jika masih ada setelah penanganan sebelumnya atau pada sampel baru) diisi dengan string kosong sebelum proses penggabungan.
-        Alasan: Kolom `content` ini akan menjadi input utama untuk TF-IDF Vectorizer dalam model content-based filtering. Menggabungkan beberapa fitur tekstual relevan ke dalam satu representasi diharapkan dapat menangkap esensi konten buku dengan lebih baik.
+        * *Alasan:* Kolom `content` ini akan menjadi input utama untuk TF-IDF Vectorizer dalam model content-based filtering. Menggabungkan beberapa fitur tekstual relevan ke dalam satu representasi diharapkan dapat menangkap esensi konten buku dengan lebih baik.
 2.  **Persiapan users_df**:
-    * Menangani Outlier dan Nilai Hilang pada Age:
+    * **Menangani Outlier dan Nilai Hilang pada Age:**
         Proses: Usia pengguna yang tercatat di atas 90 tahun atau di bawah 5 tahun dianggap sebagai outlier atau data yang tidak akurat, sehingga nilai-nilai ini diubah menjadi NaN. Setelah itu, semua nilai NaN pada kolom Age (baik yang berasal dari data asli maupun yang baru diubah karena outlier) diisi dengan nilai median dari usia pengguna yang valid. Terakhir, tipe data kolom Age diubah menjadi int.
-        Alasan: Membersihkan data usia dari nilai-nilai ekstrem yang kemungkinan besar salah input sangat penting untuk analisis demografis yang akurat atau jika usia akan digunakan sebagai fitur. Imputasi dengan median membantu mempertahankan distribusi data usia tanpa membuang banyak baris data karena nilai hilang.
+        * *Alasan:* Membersihkan data usia dari nilai-nilai ekstrem yang kemungkinan besar salah input sangat penting untuk analisis demografis yang akurat atau jika usia akan digunakan sebagai fitur. Imputasi dengan median membantu mempertahankan distribusi data usia tanpa membuang banyak baris data karena nilai hilang.
 3.  **Persiapan ratings_df (untuk Collaborative Filtering)**:
-    * Filter Rating Eksplisit:
+    * **Filter Rating Eksplisit:**
         Proses: Baris data dari `ratings_df` di mana Book-Rating adalah 0 (menandakan rating implisit atau tidak ada rating) dihilangkan. Hasilnya disimpan dalam dataframe baru `ratings_explicit_df`.
-        Alasan: Model collaborative filtering berbasis SVD yang akan digunakan umumnya dirancang untuk bekerja dengan preferensi eksplisit yang dinyatakan oleh pengguna (misalnya, rating 1-10). Rating 0 tidak memberikan informasi preferensi yang jelas dan dapat mengganggu proses pembelajaran model.
-    * Penggabungan Data:
+        * *Alasan:* Model collaborative filtering berbasis SVD yang akan digunakan umumnya dirancang untuk bekerja dengan preferensi eksplisit yang dinyatakan oleh pengguna (misalnya, rating 1-10). Rating 0 tidak memberikan informasi preferensi yang jelas dan dapat mengganggu proses pembelajaran model.
+    * **Penggabungan Data:**
         Proses: Dataframe `ratings_explicit_df` digabungkan (merged) dengan `books_df` (untuk mendapatkan Book-Title berdasarkan ISBN) dan dengan `users_df` (untuk mendapatkan Age berdasarkan User-ID). Hasil penggabungan ini disimpan sebagai `full_data_explicit`.
-        Alasan: Menggabungkan data ini memudahkan analisis eksploratif lebih lanjut dan memastikan semua informasi yang relevan (pengguna, item, rating, serta beberapa metadata item dan pengguna) tersedia dalam satu struktur data terpadu sebelum pemfilteran lebih lanjut.
+        * *Alasan:* Menggabungkan data ini memudahkan analisis eksploratif lebih lanjut dan memastikan semua informasi yang relevan (pengguna, item, rating, serta beberapa metadata item dan pengguna) tersedia dalam satu struktur data terpadu sebelum pemfilteran lebih lanjut.
     * Filtering untuk Mengurangi Sparsity:
         Proses: Dilakukan dua tahap pemfilteran pada `full_data_explicit` untuk mengurangi masalah sparsity data:
         1.  Hanya pengguna yang telah memberikan minimal 5 rating eksplisit yang dipertahankan.
