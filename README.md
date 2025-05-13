@@ -134,7 +134,7 @@ Proses persiapan data dilakukan untuk membersihkan, mentransformasi, dan menyusu
     * **Penggabungan Data:**
         Proses: Dataframe `ratings_explicit_df` digabungkan (merged) dengan `books_df` (untuk mendapatkan Book-Title berdasarkan ISBN) dan dengan `users_df` (untuk mendapatkan Age berdasarkan User-ID). Hasil penggabungan ini disimpan sebagai `full_data_explicit`.
         * *Alasan:* Menggabungkan data ini memudahkan analisis eksploratif lebih lanjut dan memastikan semua informasi yang relevan (pengguna, item, rating, serta beberapa metadata item dan pengguna) tersedia dalam satu struktur data terpadu sebelum pemfilteran lebih lanjut.
-    * Filtering untuk Mengurangi Sparsity:
+    * **Filtering untuk Mengurangi Sparsity:**
         Proses: Dilakukan dua tahap pemfilteran pada `full_data_explicit` untuk mengurangi masalah sparsity data:
         1.  Hanya pengguna yang telah memberikan minimal 5 rating eksplisit yang dipertahankan.
         2.  Dari hasil langkah pertama, hanya buku yang telah menerima minimal 5 rating eksplisit yang dipertahankan.
